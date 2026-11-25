@@ -1,0 +1,597 @@
+{
+  "info": {
+    "name": "Evaluacion 04 - Gestion de donaciones",
+    "description": "Pruebas de la arquitectura de microservicios (Eureka, API Gateway, OpenFeign y Resilience4j).\\n\\nTodas las rutas pasan por el API Gateway en el puerto 8090.\\n\\nAutor: Eder Marcelo Yaycate Bardales",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "gateway",
+      "value": "http://localhost:8090"
+    },
+    {
+      "key": "eureka",
+      "value": "http://localhost:8761"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Donantes",
+      "item": [
+        {
+          "name": "Listar donantes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/api/donantes",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donantes"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener donante 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/api/donantes/1",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donantes",
+                "1"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Crear donante",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/donantes",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donantes"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombres\": \"Rosa\",\n  \"apellidos\": \"Huaman Lopez\",\n  \"dni\": \"74567890\",\n  \"email\": \"rosa.huaman@correo.com\",\n  \"telefono\": \"944556677\",\n  \"activo\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar donante 1",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/donantes/1",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donantes",
+                "1"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombres\": \"Eder Marcelo\",\n  \"apellidos\": \"Yaycate Bardales\",\n  \"dni\": \"72345678\",\n  \"email\": \"eder.yaycate@tecsup.edu.pe\",\n  \"telefono\": \"987654321\",\n  \"activo\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar donante 4",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/api/donantes/4",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donantes",
+                "4"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Validacion: DNI invalido (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/donantes",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donantes"
+              ]
+            },
+            "description": "Debe responder 400 con el detalle por campo.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombres\": \"Prueba\",\n  \"apellidos\": \"Error\",\n  \"dni\": \"123\",\n  \"email\": \"no-es-correo\",\n  \"telefono\": \"1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Error: donante inexistente (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/api/donantes/999",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donantes",
+                "999"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Campanas",
+      "item": [
+        {
+          "name": "Listar campanas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/api/campanas",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "campanas"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener campana 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/api/campanas/1",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "campanas",
+                "1"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Crear campana",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/campanas",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "campanas"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Utiles Escolares 2027\",\n  \"descripcion\": \"Mochilas y cuadernos para inicio de clases\",\n  \"metaRecaudacion\": 9500.0,\n  \"fechaInicio\": \"2027-01-10\",\n  \"fechaFin\": \"2027-03-01\",\n  \"estado\": \"ACTIVA\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar campana 1",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/campanas/1",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "campanas",
+                "1"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Navidad Solidaria 2026\",\n  \"descripcion\": \"Juguetes, alimentos y ropa de abrigo\",\n  \"metaRecaudacion\": 18000.0,\n  \"fechaInicio\": \"2026-11-01\",\n  \"fechaFin\": \"2026-12-24\",\n  \"estado\": \"ACTIVA\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar campana 3",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/api/campanas/3",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "campanas",
+                "3"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Validacion: fecha fin anterior (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/campanas",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "campanas"
+              ]
+            },
+            "description": "Regla de negocio: la fecha de fin no puede ser anterior a la de inicio.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Campana con fechas al reves\",\n  \"metaRecaudacion\": 100.0,\n  \"fechaInicio\": \"2026-12-01\",\n  \"fechaFin\": \"2026-11-01\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3. Donaciones (comunicacion entre servicios)",
+      "item": [
+        {
+          "name": "Listar donaciones (OpenFeign)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/api/donaciones",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donaciones"
+              ]
+            },
+            "description": "Cada donacion llega con los datos del donante y de la campana, traidos de los otros dos microservicios."
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener donacion 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/api/donaciones/1",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donaciones",
+                "1"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Listar donaciones de la campana 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/api/donaciones?campanaId=1",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donaciones?campanaId=1"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Crear donacion",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/donaciones",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donaciones"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"donanteId\": 2,\n  \"campanaId\": 1,\n  \"monto\": 750.0,\n  \"fechaDonacion\": \"2026-11-20\",\n  \"metodoPago\": \"TARJETA\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar donacion 1",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/donaciones/1",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donaciones",
+                "1"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"donanteId\": 1,\n  \"campanaId\": 1,\n  \"monto\": 400.0,\n  \"fechaDonacion\": \"2026-11-05\",\n  \"metodoPago\": \"YAPE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar donacion 4",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/api/donaciones/4",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donaciones",
+                "4"
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Validacion: monto y metodo invalidos (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/donaciones",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donaciones"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"donanteId\": 1,\n  \"campanaId\": 1,\n  \"monto\": 0.1,\n  \"fechaDonacion\": \"2030-01-01\",\n  \"metodoPago\": \"BITCOIN\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4. Tolerancia a fallos",
+      "item": [
+        {
+          "name": "Circuit Breaker: listar con donante-service caido",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/api/donaciones",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donaciones"
+              ]
+            },
+            "description": "Detener donante-service y repetir. La respuesta debe seguir llegando con 200 y el donante en 'Donante no disponible'."
+          },
+          "response": []
+        },
+        {
+          "name": "Estado de los circuitos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/api/donaciones/../../actuator/circuitbreakers",
+              "host": [
+                "{{gateway}}"
+              ],
+              "path": [
+                "api",
+                "donaciones",
+                "..",
+                "..",
+                "actuator",
+                "circuitbreakers"
+              ]
+            },
+            "description": "Se consulta directo al servicio: http://localhost:8083/actuator/circuitbreakers"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

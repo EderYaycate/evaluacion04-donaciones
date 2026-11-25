@@ -1,0 +1,94 @@
+# Levanta el sistema completo con un solo comando:
+#   docker compose up --build
+#
+# El Gateway queda en http://localhost:8090 y Eureka en http://localhost:8761
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: donaciones-mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3307:3306"          # 3307 afuera para no chocar con el MySQL de XAMPP
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d:ro
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  eureka-server:
+    build: ./eureka-server
+    container_name: donaciones-eureka
+    environment:
+      EUREKA_HOSTNAME: eureka-server
+    ports:
+      - "8761:8761"
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget -qO- http://localhost:8761/actuator/health || wget -qO- http://localhost:8761/"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  donante-service:
+    build: ./donante-service
+    container_name: donaciones-donante
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/bd_donante_dev?serverTimezone=America/Lima
+      DB_USER: root
+      DB_PASSWORD: ""
+      EUREKA_URL: http://eureka-server:8761/eureka
+      SERVICE_HOSTNAME: donante-service
+      PORT: "8081"
+    depends_on:
+      mysql: { condition: service_healthy }
+      eureka-server: { condition: service_started }
+
+  campana-service:
+    build: ./campana-service
+    container_name: donaciones-campana
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/bd_campana_dev?serverTimezone=America/Lima
+      DB_USER: root
+      DB_PASSWORD: ""
+      EUREKA_URL: http://eureka-server:8761/eureka
+      SERVICE_HOSTNAME: campana-service
+      PORT: "8082"
+    depends_on:
+      mysql: { condition: service_healthy }
+      eureka-server: { condition: service_started }
+
+  donacion-service:
+    build: ./donacion-service
+    container_name: donaciones-donacion
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/bd_donacion_dev?serverTimezone=America/Lima
+      DB_USER: root
+      DB_PASSWORD: ""
+      EUREKA_URL: http://eureka-server:8761/eureka
+      SERVICE_HOSTNAME: donacion-service
+      PORT: "8083"
+    depends_on:
+      mysql: { condition: service_healthy }
+      eureka-server: { condition: service_started }
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: donaciones-gateway
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka
+      SERVICE_HOSTNAME: api-gateway
+      PORT: "8090"
+    ports:
+      - "8090:8090"
+    depends_on:
+      eureka-server: { condition: service_started }
+
+volumes:
+  mysql-data:

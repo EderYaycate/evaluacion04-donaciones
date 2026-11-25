@@ -1,0 +1,41 @@
+server:
+  # 8080 esta ocupado por Oracle XE en el equipo de desarrollo, por eso 8090.
+  port: ${PORT:8090}
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: false
+          routes:
+            # lb:// resuelve el destino por el nombre registrado en Eureka,
+            # nunca por un host y un puerto escritos a mano.
+            - id: donante-service
+              uri: lb://donante-service
+              predicates:
+                - Path=/api/donantes/**
+            - id: campana-service
+              uri: lb://campana-service
+              predicates:
+                - Path=/api/campanas/**
+            - id: donacion-service
+              uri: lb://donacion-service
+              predicates:
+                - Path=/api/donaciones/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    hostname: ${SERVICE_HOSTNAME:localhost}
+    prefer-ip-address: ${PREFER_IP:false}
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
